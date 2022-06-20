@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="../perlin-noise.js"></script>
+
+		<script type="application/javascript">
+			window.addEventListener('load', function(e) {
+				function drawPixel(x, y, color) {
+					data[0] = color.r;
+					data[1] = color.g;
+					data[2] = color.b;
+					data[3] = color.a;
+				  
+					context.putImageData(image, x, y);
+				}
+
+
+				var canvas = document.getElementById('canvas');
+				var context = canvas.getContext('2d');
+				var image = context.createImageData(1,1);
+				var data = image.data;
+				var scale = 0.01;
+				
+				var perlin = new PerlinNoise();
+				
+				
+				
+				function drawRow(i) {
+					let p;
+					let colour = {}
+					
+					for (let j = 0; j < 500; j++) {
+						p = (perlin.valueAt(i * scale, j * scale) + 1) * 128;
+						colour.r = p;
+						colour.g = p;
+						colour.b = p;
+						colour.a = 255;
+							
+						drawPixel(i % 500, j, colour);
+					}
+				}
+				
+				let i = 0;
+				let j = 0;
+				let flag = true;
+				
+				let x = setInterval(function() {
+					if (flag)
+						drawRow(i);
+					
+					i += 1;
+				}, 0);
+			});
+		</script>
+	</head>
+	<body>
+		<canvas id="canvas" width="500" height="500"></canvas>
+	</body>
+</html>
